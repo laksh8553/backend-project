@@ -20,6 +20,7 @@
     "npm-watch": "^0.13.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.2"
   }
 }
