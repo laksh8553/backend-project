@@ -2,15 +2,24 @@
   "name": "project1",
   "version": "1.0.0",
   "description": "a backend project for understanding",
+  "type": "module",
   "keywords": [
     "javascript",
     "backend"
   ],
   "license": "ISC",
   "author": "lakshay gupta",
-  "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "watch -p 'src/index.js' -- npm run start",
+    "watch": "npm run build --watch",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "npm-watch": "^0.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
