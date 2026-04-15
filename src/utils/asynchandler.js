@@ -1,8 +1,8 @@
-const asynHandler=(requestHandler)=>(req,res,next)=>{
-    Promise.resolve(requestHandler(req, res, next)).catch((error)=> next(error))
+const asyncHandler=(requestHandler)=>(req,res,next)=>{
+   return Promise.resolve(requestHandler(req, res, next)).catch((error)=> next(error))
 }
 
-export{asynHandler}
+export{asyncHandler}
 
 
 //another method to invoke the async handler is to use try catch block. But this method is more concise and cleaner. We can use it like this:

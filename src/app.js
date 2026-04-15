@@ -14,4 +14,13 @@ app.use(express.urlencoded({extended: true,limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
+
+//routes import 
+import userRoutes from "./routes/user.routes.js"
+
+//routes
+app.use("/api/v1/users", userRoutes)
+
+// it will call function like http://localhost:8000/api/v1/users/register
+//users is the base route and register is the endpoint for registration . user will come as prefix in the controller file and register will be the function which will be called when user hit the endpoint
 export {app}
