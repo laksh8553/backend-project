@@ -16,14 +16,14 @@ const userRegister = asyncHandler(async (req, res) => {
     // check for user creation
     // return res
 
-    const {fullName,username,email,password} = req.body
-    console.log("email",email);
+    const {fullName,username,email,password} = req.body;
+    // console.log("email",email);
 
     if([fullName, username, email, password].some((field) => field?.trim() === "")){
     throw new ApiError(400,"All fields are required")
     }
 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or:[
             {username},
             {email}
@@ -34,14 +34,21 @@ const userRegister = asyncHandler(async (req, res) => {
         throw new ApiError(400,"User already exists with email or username")
     }
 
-    const avtarLocalPath = req.files?.avatar?.[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
+    const avatarLocalPath = req.files?.avatar?.[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
+    //this method failed when there was no file uploaded for cover image. it threw error as it was trying to access path of undefined. so i have used optional chaining operator to avoid this error. now if there is no file uploaded for cover image, coverImageLocalPath will be undefined and we will handle this case in uploadOnCloudinary function.
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0 ){
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
+    // now we have avatarLocalPath and coverImageLocalPath. if avatarLocalPath is not present, we will throw error as avatar is required. if coverImageLocalPath is not present, we will pass undefined to uploadOnCloudinary function and handle it there.
 
-    if(!avtarLocalPath){
+
+    if(!avatarLocalPath){
         throw new ApiError(400,"Avatar file is required")
     }
 
-    const avatar= await uploadOnCloudinary(avtarLocalPath)
+    const avatar= await uploadOnCloudinary(avatarLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
     if(!avatar){
