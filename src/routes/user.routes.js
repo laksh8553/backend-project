@@ -1,5 +1,17 @@
 import { Router } from "express";
-import {loginUser, logoutUser, userRegister,refreshAccessToken } from "../controllers/user.controller.js";
+import { 
+    loginUser, 
+    logoutUser, 
+    registerUser, 
+    refreshAccessToken, 
+    changeCurrentPassword, 
+    getCurrentUser, 
+    updateUserAvatar, 
+    updateUserCoverImage, 
+    getUserChannelProfile, 
+    getWatchHistory, 
+    updateAccountDetails
+} from "../controllers/user.controller.js";
 import {upload} from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 
@@ -23,7 +35,16 @@ router.route("/login").post(loginUser)
 //secured routes for user profile update, password change, etc. can be added here. we will add them later when we have authentication and authorization in place.
 
 router.route("/logout").post(verifyJWT,logoutUser)
-router.route("/refresh-token").post(refreshAccessToken)
+router.route("/refresh-token").post(refreshAccessToken);
+router.route("/change-password").post(verifyJWT, changeCurrentPassword);
+router.route("/current-user").get(verifyJWT, getCurrentUser);
+router.route("/update-account").patch(verifyJWT, updateAccountDetails);
+
+router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar);
+router.route("/cover-image").patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage);
+
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile);
+router.route("/history").get(verifyJWT, getWatchHistory);
 
 
 
